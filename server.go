@@ -30,7 +30,10 @@ func Run(m *martini.Martini, r martini.Router) error {
 	stopSig := types.NewStringSignal(stopString, nil)
 
 	onceInit.Do(initOnce)
+
 	m.Map(http.Dir(staticPath))
+	m.Map(types.ContentDir(contentPath))
+	m.Map(types.TemplateDir(templatePath))
 
 	srv = manners.NewServer()
 	core.ListenSignal(sigReceive(srv.Shutdown), os.Interrupt, os.Kill, stopSig)
@@ -39,7 +42,7 @@ func Run(m *martini.Martini, r martini.Router) error {
 
 	go func() {
 		stop <- true
-		core.FireSignal(types.NewStringSignal(core.ServerShutDown, nil))
+		core.FireSignal(types.NewStringSignal(core.ServerShutDown, nil), true)
 		srv.Shutdown <- true
 	}()
 
