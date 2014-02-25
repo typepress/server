@@ -51,6 +51,21 @@ func usage() {
 	os.Exit(2)
 }
 
+// +dl en
+/*
+  LoadConfig to load base configure from:
+	- Command-line flags.
+	- the environment variable, to sets such as: os.Setenv(core.SessionName+"_laddr").
+	- TOML format config file.
+*/
+// +dl
+
+/*
+  LoadConfig 调入基本配置从:
+	- 命令行参数.
+	- 环境变量, 通过 os.Setenv(core.SessionName+"_laddr") 形式进行设置.
+	- TOML 格式配置文件.
+*/
 func LoadConfig() {
 	const try = "conf/default.toml"
 	var err error
@@ -60,6 +75,7 @@ func LoadConfig() {
 		fmt.Println(Version)
 		os.Exit(0)
 	}
+	getEnv()
 
 	config := try
 	if len(configFile) != 0 {
@@ -125,4 +141,33 @@ func LoadConfig() {
 func newItem(kind toml.Kind, x interface{}) (*toml.Item, error) {
 	it := toml.NewItem(kind)
 	return it, it.Set(x)
+}
+
+// Get flags from the environment variable
+func getEnv() {
+	var tmp string
+	tmp = os.Getenv(core.SessionName + "_domain")
+	if len(tmp) != 0 {
+		domain = tmp
+	}
+	tmp = os.Getenv(core.SessionName + "_laddr")
+	if len(tmp) != 0 {
+		laddr = tmp
+	}
+	tmp = os.Getenv(core.SessionName + "_config")
+	if len(tmp) != 0 {
+		configFile = tmp
+	}
+	tmp = os.Getenv(core.SessionName + "_static")
+	if len(tmp) != 0 {
+		staticPath = tmp
+	}
+	tmp = os.Getenv(core.SessionName + "_content")
+	if len(tmp) != 0 {
+		contentPath = tmp
+	}
+	tmp = os.Getenv(core.SessionName + "_template")
+	if len(tmp) != 0 {
+		templatePath = tmp
+	}
 }

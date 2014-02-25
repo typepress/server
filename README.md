@@ -5,6 +5,7 @@ HTTP Static Server module base on Martini.
 基于 Martini 的 HTTP 静态文件服务器模块, 不包含路由. 只支持以下功能:
 
  - 最基础的命令行参数
+ - os.Getenv 获取命令行参数
  - 支持 TOML 配置文件
  - 安全关闭机制
  - 静态文件输出, 预压缩
